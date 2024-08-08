@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卫生巾产品页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+        .header, .footer {
+            text-align: center;
+            padding: 20px;
+        }
+        .header {
+            background-color: #f8f8f8;
+        }
+        .footer {
+            background-color: #f1f1f1;
+        }
+        .categories, .brands {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .product {
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 10px;
+            width: calc(33.333% - 20px);
+        }
+        .product img {
+            max-width: 100%;
+        }
+        .product button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>卫生巾产品页面</h1>
+    </div>
+    <div class="container">
+        <div class="categories">
+            <button onclick="filterProducts('日用')">日用</button>
+            <button onclick="filterProducts('夜用')">夜用</button>
+            <button onclick="filterProducts('安睡裤')">安睡裤</button>
+        </div>
+        <div class="brands">
+            <button onclick="filterProducts('ABC')">ABC</button>
+            <button onclick="filterProducts('苏菲')">苏菲</button>
+            <button onclick="filterProducts('护舒宝')">护舒宝</button>
+            <button onclick="filterProducts('植护')">植护</button>
+            <button onclick="filterProducts('高洁丝')">高洁丝</button>
+            <button onclick="filterProducts('淘淘氧棉')">淘淘氧棉</button>
+            <button onclick="filterProducts('乐而雅')">乐而雅</button>
+        </div>
+        <div class="product-list" id="product-list">
+            <!-- Products will be dynamically loaded here -->
+        </div>
+        <div>
+            <button onclick="checkout()">去结算</button>
+        </div>
+    </div>
+    <div class="footer">
+        <p>联系微信获取支付信息 📞</p>
+    </div>
+
+    <script>
+        const products = [
+            { id: 1, name: '日用卫生巾', category: '日用', brand: 'ABC', price: 10, image: 'product1.jpg' },
+            { id: 2, name: '夜用卫生巾', category: '夜用', brand: '苏菲', price: 12, image: 'product2.jpg' },
+            { id: 3, name: '安睡裤', category: '安睡裤', brand: '护舒宝', price: 15, image: 'product3.jpg' },
+            // 更多产品...
+        ];
+
+        let cart = [];
+
+        function filterProducts(filter) {
+            const filteredProducts = products.filter(product => 
+                product.category === filter || product.brand === filter
+            );
+            displayProducts(filteredProducts);
+        }
+
+        function displayProducts(productList) {
+            const productContainer = document.getElementById('product-list');
+            productContainer.innerHTML = '';
+            productList.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.classList.add('product');
+                productElement.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>价格: ¥${product.price}</p>
+                    <button onclick="addToCart(${product.id})">添加到购物车</button>
+                `;
+                productContainer.appendChild(productElement);
+            });
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            cart.push(product);
+            alert(`${product.name} 已添加到购物车`);
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('购物车为空');
+                return;
+            }
+            const orderDetails = cart.map(product => `${product.name} - ¥${product.price}`).join('\n');
+            alert('请联系微信获取支付信息\n订单详情:\n' + orderDetails);
+        }
+
+        // 初始显示所有产品
+        displayProducts(products);
+    </script>
+</body>
+</html>
